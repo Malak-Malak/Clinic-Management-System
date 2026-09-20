@@ -1,8 +1,10 @@
+import AdminDoctors from './pages/admin/AdminDoctors';
+import ProtectedRoute from './components/ProtectedRoute';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import PatientDashboard from './pages/PatientDashboard';
-
+import Doctors from './pages/Doctors';
 function App() {
   return (
     <Routes>
@@ -10,6 +12,15 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/patient/dashboard" element={<PatientDashboard />} />
+      <Route path="/patient/doctors" element={<Doctors />} />
+      <Route
+  path="/admin/doctors"
+  element={
+    <ProtectedRoute allowedRoles={['Admin']}>
+      <AdminDoctors />
+    </ProtectedRoute>
+  }
+/>
     </Routes>
   );
 }
