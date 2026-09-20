@@ -19,6 +19,11 @@ export default function Navbar() {
         <Link to="/patient/doctors" className="text-gray-600 hover:text-black">
           Doctors
         </Link>
+        {user?.role === 'Patient' && (
+          <Link to="/patient/appointments" className="text-gray-600 hover:text-black">
+            My Appointments
+          </Link>
+        )}
         {user?.role === 'Admin' && (
           <Link to="/admin/doctors" className="text-gray-600 hover:text-black">
             Manage Doctors

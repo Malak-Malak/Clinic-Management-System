@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { getAllDoctors } from '../services/doctorService';
 import Navbar from '../components/Navbar';
+import BookingPanel from '../components/BookingPanel';
 
 export default function Doctors() {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [search, setSearch] = useState('');
+  const [expandedId, setExpandedId] = useState(null);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -27,6 +29,10 @@ export default function Doctors() {
     doctor.fullName.toLowerCase().includes(search.toLowerCase()) ||
     doctor.specialty.toLowerCase().includes(search.toLowerCase())
   );
+
+  const toggleExpand = (id) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
 
   if (loading) {
     return <div className="p-8 text-center">Loading doctors...</div>;
@@ -57,17 +63,33 @@ export default function Doctors() {
             {filteredDoctors.map((doctor) => (
               <div
                 key={doctor.id}
-                className="bg-white p-4 rounded-lg shadow-sm border flex justify-between items-center"
+                className="bg-white p-4 rounded-lg shadow-sm border"
               >
-                <div>
-                  <h2 className="font-semibold">{doctor.fullName}</h2>
-                  <p className="text-sm text-gray-600">{doctor.specialty}</p>
-                  <p className="text-sm text-gray-500 mt-1">{doctor.description}</p>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="font-semibold">{doctor.fullName}</h2>
+                    <p className="text-sm text-gray-600">{doctor.specialty}</p>
+                    <p className="text-sm text-gray-500 mt-1">{doctor.description}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {!doctor.isActive && (
+                      <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">
+                        Inactive
+                      </span>
+                    )}
+                    {doctor.isActive && (
+                      <button
+                        onClick={() => toggleExpand(doctor.id)}
+                        className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                      >
+                        {expandedId === doctor.id ? 'Close' : 'Book'}
+                      </button>
+                    )}
+                  </div>
                 </div>
-                {!doctor.isActive && (
-                  <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">
-                    Inactive
-                  </span>
+
+                {expandedId === doctor.id && (
+                  <BookingPanel doctorId={doctor.id} />
                 )}
               </div>
             ))}
