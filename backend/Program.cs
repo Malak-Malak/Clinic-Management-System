@@ -14,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllers();
 // Register services
 builder.Services.AddScoped<backend.Services.IAuthService, backend.Services.AuthService>();
+builder.Services.AddScoped<backend.Services.IDoctorService, backend.Services.DoctorService>();
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -82,6 +83,25 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<backend.Data.AppDbContext>();
+    db.Database.Migrate();
+
+    if (!db.Users.Any(u => u.Role == backend.Enums.UserRole.Admin))
+    {
+        var admin = new backend.Models.User
+        {
+            FullName = "System Admin",
+            Email = "admin@clinic.com",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin123!"),
+            Phone = "0000000000",
+            Role = backend.Enums.UserRole.Admin
+        };
+        db.Users.Add(admin);
+        db.SaveChanges();
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {
