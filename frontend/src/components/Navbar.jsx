@@ -24,6 +24,11 @@ export default function Navbar() {
             My Appointments
           </Link>
         )}
+        {user?.role === 'Patient' && (
+          <Link to="/patient/visits" className="text-gray-600 hover:text-black">
+            Visit History
+          </Link>
+        )}
         {user?.role === 'Admin' && (
           <Link to="/admin/doctors" className="text-gray-600 hover:text-black">
             Manage Doctors

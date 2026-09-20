@@ -18,9 +18,16 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await login({ email, password });
+          const response = await login({ email, password });
       loginUser(response.data);
-      navigate('/patient/dashboard');
+
+      if (response.data.role === 'Doctor') {
+        navigate('/doctor/dashboard');
+      } else if (response.data.role === 'Admin') {
+        navigate('/admin/doctors');
+      } else {
+        navigate('/patient/dashboard');
+      }
     } catch (err) {
       if (err.response?.status === 401) {
         setError('Invalid email or password.');
