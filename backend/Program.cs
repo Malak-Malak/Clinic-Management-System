@@ -15,6 +15,7 @@ builder.Services.AddControllers();
 // Register services
 builder.Services.AddScoped<backend.Services.IAuthService, backend.Services.AuthService>();
 builder.Services.AddScoped<backend.Services.IDoctorService, backend.Services.DoctorService>();
+builder.Services.AddScoped<backend.Services.IScheduleService, backend.Services.ScheduleService>();
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
