@@ -29,10 +29,15 @@ export default function Navbar() {
             Visit History
           </Link>
         )}
-        {user?.role === 'Admin' && (
-          <Link to="/admin/doctors" className="text-gray-600 hover:text-black">
-            Manage Doctors
-          </Link>
+               {user?.role === 'Admin' && (
+          <>
+            <Link to="/admin/dashboard" className="text-gray-600 hover:text-black">
+              Dashboard
+            </Link>
+            <Link to="/admin/doctors" className="text-gray-600 hover:text-black">
+              Manage Doctors
+            </Link>
+          </>
         )}
       </div>
 

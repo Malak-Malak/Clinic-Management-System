@@ -23,8 +23,8 @@ export default function Login() {
 
       if (response.data.role === 'Doctor') {
         navigate('/doctor/dashboard');
-      } else if (response.data.role === 'Admin') {
-        navigate('/admin/doctors');
+            } else if (response.data.role === 'Admin') {
+        navigate('/admin/dashboard');
       } else {
         navigate('/patient/dashboard');
       }
