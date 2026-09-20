@@ -5,6 +5,7 @@ import {
   deactivateDoctor,
 } from '../../services/doctorService';
 import Navbar from '../../components/Navbar';
+import DoctorSchedule from '../../components/DoctorSchedule';
 
 export default function AdminDoctors() {
   const [doctors, setDoctors] = useState([]);
@@ -13,6 +14,7 @@ export default function AdminDoctors() {
   const [showForm, setShowForm] = useState(false);
   const [formError, setFormError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [expandedId, setExpandedId] = useState(null);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -73,6 +75,10 @@ export default function AdminDoctors() {
     } catch (err) {
       setError('Unable to deactivate doctor.');
     }
+  };
+
+  const toggleExpand = (id) => {
+    setExpandedId(expandedId === id ? null : id);
   };
 
   if (loading) {
@@ -198,32 +204,44 @@ export default function AdminDoctors() {
           {doctors.map((doctor) => (
             <div
               key={doctor.id}
-              className="bg-white p-4 rounded-lg shadow-sm border flex justify-between items-center"
+              className="bg-white p-4 rounded-lg shadow-sm border"
             >
-              <div>
-                <h2 className="font-semibold">{doctor.fullName}</h2>
-                <p className="text-sm text-gray-600">{doctor.specialty}</p>
-                <p className="text-xs text-gray-400">{doctor.email}</p>
-              </div>
-              <div className="flex items-center gap-3">
-                {doctor.isActive ? (
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
-                    Active
-                  </span>
-                ) : (
-                  <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">
-                    Inactive
-                  </span>
-                )}
-                {doctor.isActive && (
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="font-semibold">{doctor.fullName}</h2>
+                  <p className="text-sm text-gray-600">{doctor.specialty}</p>
+                  <p className="text-xs text-gray-400">{doctor.email}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  {doctor.isActive ? (
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                      Active
+                    </span>
+                  ) : (
+                    <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">
+                      Inactive
+                    </span>
+                  )}
+                  {doctor.isActive && (
+                    <button
+                      onClick={() => handleDeactivate(doctor.id)}
+                      className="text-sm text-red-600 hover:underline"
+                    >
+                      Deactivate
+                    </button>
+                  )}
                   <button
-                    onClick={() => handleDeactivate(doctor.id)}
-                    className="text-sm text-red-600 hover:underline"
+                    onClick={() => toggleExpand(doctor.id)}
+                    className="text-sm text-blue-600 hover:underline"
                   >
-                    Deactivate
+                    {expandedId === doctor.id ? 'Hide Schedule' : 'Manage Schedule'}
                   </button>
-                )}
+                </div>
               </div>
+
+              {expandedId === doctor.id && (
+                <DoctorSchedule doctorId={doctor.id} />
+              )}
             </div>
           ))}
         </div>
