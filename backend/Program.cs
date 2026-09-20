@@ -18,6 +18,7 @@ builder.Services.AddScoped<backend.Services.IDoctorService, backend.Services.Doc
 builder.Services.AddScoped<backend.Services.IScheduleService, backend.Services.ScheduleService>();
 builder.Services.AddScoped<backend.Services.IAppointmentService, backend.Services.AppointmentService>();
 builder.Services.AddScoped<backend.Services.IVisitRecordService, backend.Services.VisitRecordService>();
+builder.Services.AddScoped<backend.Services.IDashboardService, backend.Services.DashboardService>();
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
