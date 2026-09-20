@@ -14,11 +14,16 @@ namespace backend.Controllers
     public class AppointmentsController : ControllerBase
     {
         private readonly IAppointmentService _appointmentService;
+        private readonly IVisitRecordService _visitRecordService;
         private readonly AppDbContext _context;
 
-        public AppointmentsController(IAppointmentService appointmentService, AppDbContext context)
+        public AppointmentsController(
+            IAppointmentService appointmentService,
+            IVisitRecordService visitRecordService,
+            AppDbContext context)
         {
             _appointmentService = appointmentService;
+            _visitRecordService = visitRecordService;
             _context = context;
         }
 
@@ -33,6 +38,13 @@ namespace backend.Controllers
             var userId = GetUserId();
             var patient = await _context.Patients.FirstOrDefaultAsync(p => p.UserId == userId);
             return patient?.Id;
+        }
+
+        private async Task<int?> GetDoctorIdAsync()
+        {
+            var userId = GetUserId();
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.UserId == userId);
+            return doctor?.Id;
         }
 
         [HttpGet("available-slots")]
@@ -100,6 +112,39 @@ namespace backend.Controllers
         {
             var appointments = await _appointmentService.GetAllAsync();
             return Ok(appointments);
+        }
+
+        [Authorize(Roles = "Doctor")]
+        [HttpGet("doctor")]
+        public async Task<IActionResult> GetDoctorAppointments()
+        {
+            var doctorId = await GetDoctorIdAsync();
+            if (doctorId == null)
+            {
+                return BadRequest(new { message = "Doctor profile not found." });
+            }
+
+            var appointments = await _appointmentService.GetDoctorAppointmentsAsync(doctorId.Value);
+            return Ok(appointments);
+        }
+
+        [Authorize(Roles = "Doctor")]
+        [HttpPost("{id}/complete")]
+        public async Task<IActionResult> CompleteVisit(int id, CreateVisitRecordRequest request)
+        {
+            var doctorId = await GetDoctorIdAsync();
+            if (doctorId == null)
+            {
+                return BadRequest(new { message = "Doctor profile not found." });
+            }
+
+            var visitRecord = await _visitRecordService.CompleteVisitAsync(id, doctorId.Value, request);
+            if (visitRecord == null)
+            {
+                return NotFound(new { message = "Appointment not found, not yours, or already completed." });
+            }
+
+            return Ok(visitRecord);
         }
     }
 }
