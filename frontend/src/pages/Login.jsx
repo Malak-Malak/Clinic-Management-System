@@ -18,12 +18,12 @@ export default function Login() {
     setLoading(true);
 
     try {
-          const response = await login({ email, password });
+      const response = await login({ email, password });
       loginUser(response.data);
 
       if (response.data.role === 'Doctor') {
         navigate('/doctor/dashboard');
-            } else if (response.data.role === 'Admin') {
+      } else if (response.data.role === 'Admin') {
         navigate('/admin/dashboard');
       } else {
         navigate('/patient/dashboard');
@@ -52,8 +52,9 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
             <input
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -63,8 +64,9 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium mb-1">Password</label>
             <input
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

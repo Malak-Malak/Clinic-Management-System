@@ -54,8 +54,9 @@ export default function Register() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Full Name</label>
+            <label htmlFor="fullName" className="block text-sm font-medium mb-1">Full Name</label>
             <input
+              id="fullName"
               type="text"
               name="fullName"
               value={formData.fullName}
@@ -66,8 +67,9 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
             <input
+              id="email"
               type="email"
               name="email"
               value={formData.email}
@@ -78,8 +80,9 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium mb-1">Password</label>
             <input
+              id="password"
               type="password"
               name="password"
               value={formData.password}
@@ -90,8 +93,9 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Phone</label>
+            <label htmlFor="phone" className="block text-sm font-medium mb-1">Phone</label>
             <input
+              id="phone"
               type="tel"
               name="phone"
               value={formData.phone}
@@ -102,8 +106,9 @@ export default function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Date of Birth</label>
+            <label htmlFor="dateOfBirth" className="block text-sm font-medium mb-1">Date of Birth</label>
             <input
+              id="dateOfBirth"
               type="date"
               name="dateOfBirth"
               value={formData.dateOfBirth}
